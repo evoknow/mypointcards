@@ -1,3 +1,16 @@
+# 🚀 DEMO / DOWNLOAD
+
+Try **MyPoint Cards** instantly at:  
+👉 [https://mypoint.cards](https://mypoint.cards)
+
+You can also download native binaries for:
+
+- **Windows (.exe)**
+- **macOS Apple Silicon (.dmg)**
+
+➡️ Visit [https://mypoint.cards](https://mypoint.cards) to download the latest versions.
+
+---
 
 # MyPoint Cards
 
@@ -101,5 +114,6 @@ These are loaded via public networks and hosted externally. Network access is re
 - macOS users install via `.dmg` file
 - Windows users run the generated `.exe` file
 - App can be distributed offline and used entirely without internet access after first load (except for Giphy or CDN fallback)
+
 
 
