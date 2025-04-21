@@ -4,11 +4,110 @@
 # Get the directory of this script
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# Path to the Python executable in the app bundle
-PYTHON_PATH="$DIR/../Resources/venv/bin/python3"
+# Create log directory if it doesn't exist
+mkdir -p "$HOME/Library/Logs"
+
+# Log file
+LOG_FILE="$HOME/Library/Logs/mypointcards_launcher.log"
+
+# Log function
+log() {
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" >> "$LOG_FILE"
+}
+
+# Error handling function - ONLY used for critical errors
+show_error() {
+    # Only show error dialog for truly critical errors
+    osascript -e "display dialog \"$1\" with title \"Error: MyPointCards\" buttons {\"OK\"} default button \"OK\" with icon stop"
+    log "CRITICAL ERROR: $1"
+}
+
+# Check if port 8000 is in use - if so, just open browser to the running instance
+if nc -z localhost 8000 2>/dev/null; then
+    log "App is already running on port 8000. Opening browser."
+    open "http://localhost:8000/"
+    exit 0
+fi
 
 # Path to the app script
 APP_SCRIPT="$DIR/../Resources/app.py"
 
-# Launch the app in the background
-"$PYTHON_PATH" "$APP_SCRIPT" "$@" &
+# Check if app script exists
+if [ ! -f "$APP_SCRIPT" ]; then
+    show_error "Application script not found at $APP_SCRIPT"
+    exit 1
+fi
+
+# Find a working Python interpreter
+PYTHON_PATHS=(
+    # First try system Python
+    "/usr/bin/python3"
+    # Then try common Homebrew paths
+    "/usr/local/bin/python3"
+    "/opt/homebrew/bin/python3"
+    # Then try macOS bundled Python
+    "/Library/Frameworks/Python.framework/Versions/Current/bin/python3"
+)
+
+PYTHON_PATH=""
+for path in "${PYTHON_PATHS[@]}"; do
+    if [ -x "$path" ]; then
+        # Test if Python works
+        "$path" -c "import http.server, socketserver, webbrowser" 2>/dev/null
+        if [ $? -eq 0 ]; then
+            PYTHON_PATH="$path"
+            break
+        fi
+    fi
+done
+
+# If no Python found, try to find it in PATH
+if [ -z "$PYTHON_PATH" ]; then
+    PYTHON_PATH=$(which python3 2>/dev/null)
+    if [ -n "$PYTHON_PATH" ]; then
+        "$PYTHON_PATH" -c "import http.server, socketserver, webbrowser" 2>/dev/null
+        if [ $? -ne 0 ]; then
+            PYTHON_PATH=""
+        fi
+    fi
+fi
+
+# If still no Python, error out
+if [ -z "$PYTHON_PATH" ]; then
+    show_error "Could not find a working Python 3 installation. Please install Python 3."
+    exit 1
+fi
+
+# Log startup
+log "Starting MyPointCards" 
+log "Using Python: $PYTHON_PATH"
+log "App script: $APP_SCRIPT"
+
+# Launch the app and wait for it to exit
+"$PYTHON_PATH" "$APP_SCRIPT" &
+
+# Store the PID of the Python process
+APP_PID=$!
+
+# Log the process start
+log "App started with PID $APP_PID"
+
+# Wait a moment for the app to start
+sleep 2
+
+# Check if the process is still running
+if kill -0 $APP_PID 2>/dev/null; then
+    log "App is running successfully"
+else
+    # Only show error if port 8000 is not in use (meaning no app is running)
+    if ! nc -z localhost 8000 2>/dev/null; then
+        show_error "Failed to start application. Check logs at $LOG_FILE"
+        exit 1
+    else
+        # If port is in use, another instance is probably running
+        log "App not running but port 8000 is in use. Opening browser."
+        open "http://localhost:8000/"
+    fi
+fi
+
+exit 0
