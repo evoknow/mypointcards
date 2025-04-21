@@ -1,0 +1,14 @@
+#!/bin/bash
+# Launcher script for MyPointCards
+
+# Get the directory of this script
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Path to the Python executable in the app bundle
+PYTHON_PATH="$DIR/../Resources/venv/bin/python3"
+
+# Path to the app script
+APP_SCRIPT="$DIR/../Resources/app.py"
+
+# Launch the app in the background
+"$PYTHON_PATH" "$APP_SCRIPT" "$@" &

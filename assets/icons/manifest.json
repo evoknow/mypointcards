@@ -1,0 +1,21 @@
+{
+  "name": "MyPointCards",
+  "short_name": "MyPoint",
+  "description": "Create and share eye-catching cards",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#ed213a",
+  "theme_color": "#ed213a",
+  "icons": [
+    {
+      "src": "https://v1.mypoint.cards/icons/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://v1.mypoint.cards/icons/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

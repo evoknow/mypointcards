@@ -1,0 +1,12 @@
+# Ignore Python virtual environments
+macos/venv/
+windows/venv/
+
+# Optional: also ignore PyInstaller and build artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.spec
+build/
+dist/
+
