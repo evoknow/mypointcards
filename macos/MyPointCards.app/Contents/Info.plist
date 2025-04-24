@@ -2,10 +2,23 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
 	<key>CFBundleDisplayName</key>
 	<string>MyPointCards</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>HTML</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.html</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleExecutable</key>
 	<string>MyPointCards</string>
 	<key>CFBundleIconFile</key>
@@ -18,17 +31,28 @@
 	<string>MyPointCards</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
+	<key>CFBundleShortVersionString</key>
+	<string>0.0.0</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>LSBackgroundOnly</key>
-	<false/>
-	<key>LSMultipleInstancesProhibited</key>
 	<true/>
 	<key>LSUIElement</key>
+	<integer>0</integer>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
+	<key>NSAppleScriptEnabled</key>
 	<false/>
 	<key>NSHighResolutionCapable</key>
+	<true/>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+	<key>NSRequiresAquaSystemAppearance</key>
+	<false/>
+	<key>NSSupportsSuddenTermination</key>
 	<true/>
 </dict>
 </plist>
